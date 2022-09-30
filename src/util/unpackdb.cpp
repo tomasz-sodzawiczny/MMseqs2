@@ -35,7 +35,7 @@ int unpackdb(int argc, const char **argv, const Command& command) {
         thread_idx = static_cast<unsigned int>(omp_get_thread_num());
 #endif
 
-#pragma omp for schedule(dynamic, 100)
+#pragma omp for schedule(dynamic, 1)
         for (size_t i = 0; i < entries; ++i) {
             progress.updateProgress();
             unsigned int key = reader.getDbKey(i);
@@ -46,6 +46,7 @@ int unpackdb(int argc, const char **argv, const Command& command) {
             if (par.unpackNameMode == Parameters::UNPACK_NAME_ACCESSION) {
                 size_t lookupId = reader.getLookupIdByKey(key);
                 name.append(FileUtil::sanitizeFilename(reader.getLookupEntryName(lookupId)));
+                Debug(Debug::ERROR) << "ENA LOOK HERE! lookupId: " << lookupId << " name: " << reader.getLookupEntryName(lookupId) << "\n";
             } else {
                 name.append(SSTR(key));
             }
